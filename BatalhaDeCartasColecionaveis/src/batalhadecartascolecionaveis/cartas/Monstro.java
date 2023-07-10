@@ -19,11 +19,12 @@ public class Monstro extends Carta{
     }
     
     public void alteraEstado(int estadoInt) {// 0 para defesa e 1 para ataque
-        this.estado = (estadoInt == 0)
+        this.estado = (estadoInt == 0);
     }
-    
+
     public int atacaDefende() {
         //TODO
+        return 0;
     }
     public void equipaItem(Equipamento equipamento) {
         if(this.equipamento == null) {

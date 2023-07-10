@@ -8,6 +8,14 @@ package batalhadecartascolecionaveis.cartas;
  *
  * @author arthu
  */
-public class Monstro {
+public class Monstro extends Carta{
+    private Equipamento equipamento;
+    private boolean estado;
+    private boolean atacou;
+
+    public Monstro(String nome, String descricao, int atk, int def) {
+        super(nome, descricao, atk, def);
+    }
+    
     
 }

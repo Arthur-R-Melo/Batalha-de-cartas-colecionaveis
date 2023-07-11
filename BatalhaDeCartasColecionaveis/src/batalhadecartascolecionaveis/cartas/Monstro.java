@@ -23,12 +23,36 @@ public class Monstro extends Carta{
     }
 
     public int atacaDefende() {
-        //TODO
-        return 0;
+        int atributo = 0;
+        if(estado) {
+            atributo+=super.def;
+            if(equipamento!=null) {
+                atributo+=equipamento.getDef();
+            }
+        }else {
+            atributo+=super.atk;
+            if(equipamento!=null) {
+                atributo += equipamento.getAtk();
+            }
+        }
+        return atributo;
     }
     public void equipaItem(Equipamento equipamento) {
         if(this.equipamento == null) {
             this.equipamento = equipamento;
         }
     }
+
+    public boolean isEstado() {
+        return estado;
+    }
+
+    public boolean isAtacou() {
+        return atacou;
+    }
+    
+    public void setAtacou(boolean atacou) {
+        this.atacou = atacou;
+    }
+
 }

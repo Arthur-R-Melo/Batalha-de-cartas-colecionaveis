@@ -9,53 +9,51 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Scanner;
 import java.util.Vector;
-
-import javax.management.monitor.MonitorSettingException;
 
 /**
  *
  * @author arthu
  */
 public abstract class Carta {
+
     private static Vector<Carta> cartas;
 
-    public static Vector<Carta> importaCarta() {
+    public static Vector<Carta> importaCarta() throws IOException {
         if (cartas == null) {
+            cartas = new Vector<>();
             File f = new File("arquivos\\cartas.csv");
-            Scanner s = new Scanner(System.in);
+            if (f.exists() && f.canRead()) {
+                try {
+                    FileReader marcaLeitura = new FileReader(f);
+                    BufferedReader bufLeitura = new BufferedReader(marcaLeitura);
 
-            try {
-                FileReader marcaLeitura = new FileReader(f);
-                BufferedReader bufLeitura = new BufferedReader(marcaLeitura);
+                    String linha;
+                    do {
+                        linha = bufLeitura.readLine();
+                        if (linha != null) {
+                            String dadosLinha[] = linha.split(";");
 
-                String linha;
-                do {
-                    linha = s.nextLine();
-
-                    if (linha != null) {
-                        String dadosLinha[] = linha.split(";");
-
-                        if (dadosLinha.length == 5) {
-                            String nome = dadosLinha[0];
-                            String descricao = dadosLinha[1];
-                            int def = Integer.parseInt(dadosLinha[2]);
-                            int atk = Integer.parseInt(dadosLinha[3]);
-                            if (dadosLinha[4].equalsIgnoreCase("equipamento")) {
-                                Equipamento temp = new Equipamento(nome, descricao, atk, def);
-                                cartas.add(temp);
-                            }else {
-                                Monstro temp = new Monstro(nome, descricao, atk, def);
-                                cartas.add(temp);
+                            if (dadosLinha.length == 5) {
+                                String nome = dadosLinha[0];
+                                String descricao = dadosLinha[1];
+                                int def = Integer.parseInt(dadosLinha[2]);
+                                int atk = Integer.parseInt(dadosLinha[3]);
+                                if (dadosLinha[4].equalsIgnoreCase("equipamento")) {
+                                    Equipamento temp = new Equipamento(nome, descricao, atk, def);
+                                    cartas.add(temp);
+                                } else {
+                                    Monstro temp = new Monstro(nome, descricao, atk, def);
+                                    cartas.add(temp);
+                                }
+                            } else {
+                                System.err.println("Problhema na linha " + linha);
                             }
-                        }else {
-                            System.err.println("Problhema na linha " + linha);
                         }
-                    }
-                } while (linha != null);
-            } catch (FileNotFoundException ex) {
-                System.err.println("Erro ao ler arquivo. Arquivo corrompido ou em uso!");
+                    } while (linha != null);
+                } catch (FileNotFoundException ex) {
+                    System.err.println("Erro ao ler arquivo. Arquivo corrompido ou em uso!");
+                }
             }
 
         }

@@ -1,7 +1,9 @@
 package batalhadecartascolecionaveis.jogadores;
 
+import batalhadecartascolecionaveis.Estilizacao;
 import batalhadecartascolecionaveis.Tabuleiro;
 import batalhadecartascolecionaveis.cartas.Carta;
+import batalhadecartascolecionaveis.cartas.Monstro;
 import java.util.Scanner;
 import java.util.Vector;
 
@@ -13,8 +15,10 @@ public class Jogador {
 
     protected int pontosDeVida;
     protected Carta[] maoDeCarta;
+    protected int id;
 
-    public Jogador() {
+    public Jogador(int id) {
+        this.id = id;
         this.pontosDeVida = 10000;
         this.maoDeCarta = new Carta[10];
     }
@@ -28,6 +32,7 @@ public class Jogador {
     }
 
     public void realizaJogada(Tabuleiro tabuleiro) {
+        Estilizacao.imprimeLinha();
         Scanner s = new Scanner(System.in);
         System.out.println("""
                            Insira o numero desejado:
@@ -37,24 +42,29 @@ public class Jogador {
                            4- Comprar Carta;
                            5- Descartar Carta;
                            6- Mudar Estado da Carta;
-                           """);
+                           7- Consultar Cartas da mao""");
         int opcao = s.nextInt();
+        Estilizacao.imprimeLinha();
 
         switch (opcao) {
             case 1 ->
-                realizaAtaque();
+                this.realizaAtaque();
             case 2 ->
-                posicionaCarta(tabuleiro);
+                this.posicionaCarta(tabuleiro);
             case 3 ->
-                equipaMonstro();
+                this.equipaMonstro();
             case 4 ->
-                compraCarta(tabuleiro.getBaralho());
+                this.compraCarta(tabuleiro.getBaralho());
             case 5 ->
-                descartaCarta();
+                this.descartaCarta(tabuleiro);
             case 6 ->
-                alteraEstadoCarta();
-            default ->
+                this.alteraEstadoCarta();
+            case 7 ->
+                this.exibirCartasDaMao();
+            default -> {
                 System.out.println("Insira um número válido!");
+                this.realizaJogada(tabuleiro);
+            }
 
         }
 
@@ -66,34 +76,52 @@ public class Jogador {
 
     protected void posicionaCarta(Tabuleiro tabuleiro) {
         Scanner s = new Scanner(System.in);
-        Carta[] mesaJogador = tabuleiro.getCartasJogador()[i];
-        //resolver esse 'i', pq tem que ter algum jeito de saber de quem estará modificando as cartas no tabuleiro
-        
+        Carta[] mesaJogador = tabuleiro.getCartasJogador()[id];
+        //resolver esse 'id', pq tem que ter algum jeito de saber de quem estará modificando as cartas no tabuleiro
+
         System.out.println("Qual carta deseja posicionar? ");
-        for (int i = 0; i < this.maoDeCarta.length; i++) {
-            if (this.maoDeCarta[i] != null) {
-                System.out.println(i + " " + this.maoDeCarta[i]);
-            }
-        }
-        
+        this.exibirCartasDaMao();
+
         int indiceConsulta;
-        
+
         do {
             System.out.println("Insira o numero da carta você deseja posicionar:");
             indiceConsulta = s.nextInt();
             if (indiceConsulta < this.maoDeCarta.length && this.maoDeCarta[indiceConsulta] != null) {
-                for (int i = 0; i < mesaJogador.length; i++) {
-                    if(mesaJogador[i] == null) {
-                        //terminar isso ainda                        
-                        //mesaJogador[i] = this.maoDeCarta[indiceConsulta];
+                if (this.maoDeCarta[indiceConsulta].getClass() == Monstro.class) {
+                    Monstro monstro = (Monstro) maoDeCarta[indiceConsulta];
+                    for (int i = 0; i < mesaJogador.length; i++) {
+                        if (mesaJogador[i] == null) {
+                            //terminar isso ainda       
+                            System.out.println("Insira:\n1: Ataque;\n2: Defesa;");
+                            int opcao = s.nextInt();
+                            switch (opcao) {
+                                case 1:
+                                    monstro.alteraEstado(1);
+                                    break;
+                                case 2:
+                                    monstro.alteraEstado(0);
+                                    break;
+                                default:
+                                    System.out.println("Número invalido! Tente novamente!");
+                                    this.posicionaCarta(tabuleiro);
+                            }
+                            mesaJogador[i] = this.maoDeCarta[indiceConsulta];
+                            this.maoDeCarta[indiceConsulta] = null;
+                            System.out.println("Carta posicionada com sucesso!");
+                            return;
+                        }
                     }
+                    System.out.println("Voce atingiu o limite do numero de cartas na mesa!");
+                } else {
+                    System.out.println("Somente monstros podem ser selecionados!");
+                    this.realizaJogada(tabuleiro);
                 }
-                System.out.println("Voce atingiu o limite do numero de cartas na mesa!");
-            }else{
+            } else {
                 System.out.println("Insira um numero valido!");
             }
         } while (!(indiceConsulta < this.maoDeCarta.length && this.maoDeCarta[indiceConsulta] != null));
-        
+
     }
 
     protected void equipaMonstro() {
@@ -101,39 +129,54 @@ public class Jogador {
     }
 
     protected void compraCarta(Vector<Carta> baralho) {
+
         for (int i = 0; i < this.maoDeCarta.length; i++) {
             if (this.maoDeCarta[i] == null) {
                 Carta novaCarta = baralho.firstElement();
                 System.out.println("Carta comprada: " + novaCarta);
                 this.maoDeCarta[i] = novaCarta;
                 baralho.remove(0);
-                break;
+                return;
             }
         }
-        
+        System.out.println("Limite de cartas atingido!");
+
     }
 
-    protected void descartaCarta() {
+    protected void descartaCarta(Tabuleiro tabuleiro) {
         Scanner s = new Scanner(System.in);
+        this.exibirCartasDaMao();
+
+        int indiceDescarte;
+        do {
+            System.out.println("Insira o numero da carta você deseja descartar: (-1 para cancelar)");
+            indiceDescarte = s.nextInt();
+            if (indiceDescarte == -1) {
+                this.realizaJogada(tabuleiro);
+            } else {
+                if (indiceDescarte < this.maoDeCarta.length && this.maoDeCarta[indiceDescarte] != null) {
+                    this.maoDeCarta[indiceDescarte] = null;
+                    System.out.println("Carta descartada!");
+                } else {
+                    System.out.println("Insira um numero valido!");
+                }
+            }
+        } while (!(indiceDescarte < this.maoDeCarta.length) && (this.maoDeCarta[indiceDescarte] == null));
+    }
+
+    protected void alteraEstadoCarta() {
+
+    }
+
+    protected void exibirCartasDaMao() {
+        System.out.println("CARTAS DA SUA MAO:");
+        Estilizacao.imprimeLinha();
         for (int i = 0; i < this.maoDeCarta.length; i++) {
             if (this.maoDeCarta[i] != null) {
                 System.out.println(i + " " + this.maoDeCarta[i]);
             }
         }
-        int indiceDescarte;
-        do {
-            System.out.println("Insira o numero da carta você deseja descartar:");
-            indiceDescarte = s.nextInt();
-            if (indiceDescarte < this.maoDeCarta.length && this.maoDeCarta[indiceDescarte] != null) {
-                this.maoDeCarta[indiceDescarte] = null;
-            }else{
-                System.out.println("Insira um numero valido!");
-            }
-        } while (!(indiceDescarte < this.maoDeCarta.length && this.maoDeCarta[indiceDescarte] != null));
-    }
-
-    protected void alteraEstadoCarta() {
-
+        Estilizacao.imprimeLinha();
     }
 
 }

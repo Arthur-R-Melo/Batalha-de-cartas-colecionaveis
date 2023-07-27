@@ -14,7 +14,7 @@ public class BatalhaDeCartasColecionaveis {
     public static void main(String[] args) {
         //só pra testar :)
         Tabuleiro tabuleiro = new Tabuleiro();
-        Jogador jog = new Jogador();
+        Jogador jog = new Jogador(0);
         while (true) {
             jog.realizaJogada(tabuleiro);
         }

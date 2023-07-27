@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Vector;
 
 /**
@@ -58,6 +59,7 @@ public abstract class Carta {
 
         }
 
+        Collections.shuffle(cartas);
         return cartas;
     }
 

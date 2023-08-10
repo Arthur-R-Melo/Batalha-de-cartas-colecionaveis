@@ -20,12 +20,19 @@ public abstract class Carta {
 
     private static Vector<Carta> cartas;
 
+    /*
+     * A função importaCarta verifica se o Vector cartas já foi instanciado, ou seja, as cartas já foram importadas do armazenamento secundário.
+     * Caso o Vector cartas já tenha sido instanciado, este é imediatamente retornado,
+     * no outro caso, as cartas são importadas do arquivo e carregadas para a memória RAM.
+     */
+
     public static Vector<Carta> importaCarta() throws IOException {
         if (cartas == null) {
             cartas = new Vector<>();
             File f = new File("arquivos\\cartas.csv");
             if (f.exists() && f.canRead()) {
                 try {
+                    cartas = new Vector<>();
                     FileReader marcaLeitura = new FileReader(f);
                     BufferedReader bufLeitura = new BufferedReader(marcaLeitura);
 
@@ -52,6 +59,7 @@ public abstract class Carta {
                             }
                         }
                     } while (linha != null);
+                    bufLeitura.close();
                 } catch (FileNotFoundException ex) {
                     System.err.println("Erro ao ler arquivo. Arquivo corrompido ou em uso!");
                 }

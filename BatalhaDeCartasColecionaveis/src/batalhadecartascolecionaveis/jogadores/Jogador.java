@@ -34,15 +34,15 @@ public class Jogador {
     public void realizaJogada(Tabuleiro tabuleiro) {
         Estilizacao.imprimeLinha();
         Scanner s = new Scanner(System.in);
+        this.compraCarta(tabuleiro);
         System.out.println("""
                            Insira o numero desejado:
                            1- Realizar Ataque;
                            2- Posicionar Carta;
                            3- Equipar Monstro;
-                           4- Comprar Carta;
-                           5- Descartar Carta;
-                           6- Mudar Estado da Carta;
-                           7- Consultar Cartas da mao""");
+                           4- Descartar Carta;
+                           5- Mudar Estado da Carta;
+                           6- Consultar Cartas da mao""");
         int opcao = s.nextInt();
         Estilizacao.imprimeLinha();
 
@@ -52,14 +52,12 @@ public class Jogador {
             case 2 ->
                 this.posicionaCarta(tabuleiro);
             case 3 ->
-                this.equipaMonstro();
+                this.equipaMonstro(tabuleiro);
             case 4 ->
-                this.compraCarta(tabuleiro.getBaralho());
-            case 5 ->
                 this.descartaCarta(tabuleiro);
-            case 6 ->
+            case 5 ->
                 this.alteraEstadoCarta();
-            case 7 ->
+            case 6 ->
                 this.exibirCartasDaMao();
             default -> {
                 System.out.println("Insira um número válido!");
@@ -76,7 +74,7 @@ public class Jogador {
 
     protected void posicionaCarta(Tabuleiro tabuleiro) {
         Scanner s = new Scanner(System.in);
-        Carta[] mesaJogador = tabuleiro.getCartasJogador()[id];
+        Carta[] mesaJogador = tabuleiro.getCartasJogador()[this.id];
         //resolver esse 'id', pq tem que ter algum jeito de saber de quem estará modificando as cartas no tabuleiro
 
         System.out.println("Qual carta deseja posicionar? ");
@@ -85,62 +83,68 @@ public class Jogador {
         int indiceConsulta;
 
         do {
-            System.out.println("Insira o numero da carta você deseja posicionar:");
+            System.out.println("Insira o numero da carta você deseja posicionar: (-1 para retornar");
             indiceConsulta = s.nextInt();
-            if (indiceConsulta < this.maoDeCarta.length && this.maoDeCarta[indiceConsulta] != null) {
-                if (this.maoDeCarta[indiceConsulta].getClass() == Monstro.class) {
-                    Monstro monstro = (Monstro) maoDeCarta[indiceConsulta];
-                    for (int i = 0; i < mesaJogador.length; i++) {
-                        if (mesaJogador[i] == null) {
-                            //terminar isso ainda       
-                            System.out.println("Insira:\n1: Ataque;\n2: Defesa;");
-                            int opcao = s.nextInt();
-                            switch (opcao) {
-                                case 1:
-                                    monstro.alteraEstado(1);
-                                    break;
-                                case 2:
-                                    monstro.alteraEstado(0);
-                                    break;
-                                default:
-                                    System.out.println("Número invalido! Tente novamente!");
-                                    this.posicionaCarta(tabuleiro);
-                            }
-                            mesaJogador[i] = this.maoDeCarta[indiceConsulta];
-                            this.maoDeCarta[indiceConsulta] = null;
-                            System.out.println("Carta posicionada com sucesso!");
-                            return;
-                        }
-                    }
-                    System.out.println("Voce atingiu o limite do numero de cartas na mesa!");
-                } else {
-                    System.out.println("Somente monstros podem ser selecionados!");
-                    this.realizaJogada(tabuleiro);
-                }
+
+            if (indiceConsulta == -1) {
+                this.realizaJogada(tabuleiro);
             } else {
-                System.out.println("Insira um numero valido!");
+
+                if (indiceConsulta < this.maoDeCarta.length && this.maoDeCarta[indiceConsulta] != null) {
+                    if (this.maoDeCarta[indiceConsulta].getClass() == Monstro.class) {
+                        Monstro monstro = (Monstro) maoDeCarta[indiceConsulta];
+                        for (int i = 0; i < mesaJogador.length; i++) {
+                            if (mesaJogador[i] == null) {
+                                System.out.println("Insira:\n1: Ataque;\n2: Defesa;");
+                                int opcao = s.nextInt();
+                                switch (opcao) {
+                                    case 1:
+                                        monstro.alteraEstado(1);
+                                        break;
+                                    case 2:
+                                        monstro.alteraEstado(0);
+                                        break;
+                                    default:
+                                        System.out.println("Número invalido! Tente novamente!");
+                                        this.posicionaCarta(tabuleiro);
+                                }
+                                mesaJogador[i] = this.maoDeCarta[indiceConsulta];
+                                this.maoDeCarta[indiceConsulta] = null;
+                                System.out.println("Carta posicionada com sucesso!");
+                                return;
+                            }
+                        }
+                        System.out.println("Voce atingiu o limite do numero de cartas na mesa!");
+                    } else {
+                        System.out.println("Somente monstros podem ser selecionados!");
+                        this.realizaJogada(tabuleiro);
+                    }
+                } else {
+                    System.out.println("Insira um numero valido!");
+                }
             }
         } while (!(indiceConsulta < this.maoDeCarta.length && this.maoDeCarta[indiceConsulta] != null));
 
     }
 
-    protected void equipaMonstro() {
+    protected void alteraEstadoCarta() {
 
     }
 
-    protected void compraCarta(Vector<Carta> baralho) {
+    protected void compraCarta(Tabuleiro tabuleiro) {
 
         for (int i = 0; i < this.maoDeCarta.length; i++) {
             if (this.maoDeCarta[i] == null) {
-                Carta novaCarta = baralho.firstElement();
+                Carta novaCarta = tabuleiro.getBaralho().firstElement();
                 System.out.println("Carta comprada: " + novaCarta);
                 this.maoDeCarta[i] = novaCarta;
-                baralho.remove(0);
+                tabuleiro.getBaralho().remove(0);
                 return;
             }
         }
-        System.out.println("Limite de cartas atingido!");
-
+        System.out.println("Limite de cartas atingido! Voce deve remover alguma!");
+        this.descartaCarta(tabuleiro);
+        this.compraCarta(tabuleiro);
     }
 
     protected void descartaCarta(Tabuleiro tabuleiro) {
@@ -164,7 +168,20 @@ public class Jogador {
         } while (!(indiceDescarte < this.maoDeCarta.length) && (this.maoDeCarta[indiceDescarte] == null));
     }
 
-    protected void alteraEstadoCarta() {
+    protected void equipaMonstro(Tabuleiro tabuleiro) {
+        Scanner s = new Scanner(System.in);
+        Carta[] mesaJogador = tabuleiro.getCartasJogador()[this.id];
+
+        //exibindo somente as cartas do jogador na mesa
+        System.out.println("Cartas que podem ser equipadas: ");
+        for (int i = 0; i < mesaJogador.length; i++) {
+            if (mesaJogador[i] != null) {
+                if (mesaJogador[i].getClass() == Monstro.class) {
+                    //terminar isso aqui
+                    System.out.println("[" + i + "]" + mesaJogador[i]);
+                }
+            }
+        }
 
     }
 
@@ -173,7 +190,7 @@ public class Jogador {
         Estilizacao.imprimeLinha();
         for (int i = 0; i < this.maoDeCarta.length; i++) {
             if (this.maoDeCarta[i] != null) {
-                System.out.println(i + " " + this.maoDeCarta[i]);
+                System.out.println("[" + i + "] " + this.maoDeCarta[i]);
             }
         }
         Estilizacao.imprimeLinha();

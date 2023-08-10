@@ -85,40 +85,46 @@ public class Jogador {
         int indiceConsulta;
 
         do {
-            System.out.println("Insira o numero da carta você deseja posicionar:");
+            System.out.println("Insira o numero da carta você deseja posicionar: (-1 para retornar");
             indiceConsulta = s.nextInt();
-            if (indiceConsulta < this.maoDeCarta.length && this.maoDeCarta[indiceConsulta] != null) {
-                if (this.maoDeCarta[indiceConsulta].getClass() == Monstro.class) {
-                    Monstro monstro = (Monstro) maoDeCarta[indiceConsulta];
-                    for (int i = 0; i < mesaJogador.length; i++) {
-                        if (mesaJogador[i] == null) {
-                            //terminar isso ainda       
-                            System.out.println("Insira:\n1: Ataque;\n2: Defesa;");
-                            int opcao = s.nextInt();
-                            switch (opcao) {
-                                case 1:
-                                    monstro.alteraEstado(1);
-                                    break;
-                                case 2:
-                                    monstro.alteraEstado(0);
-                                    break;
-                                default:
-                                    System.out.println("Número invalido! Tente novamente!");
-                                    this.posicionaCarta(tabuleiro);
-                            }
-                            mesaJogador[i] = this.maoDeCarta[indiceConsulta];
-                            this.maoDeCarta[indiceConsulta] = null;
-                            System.out.println("Carta posicionada com sucesso!");
-                            return;
-                        }
-                    }
-                    System.out.println("Voce atingiu o limite do numero de cartas na mesa!");
-                } else {
-                    System.out.println("Somente monstros podem ser selecionados!");
-                    this.realizaJogada(tabuleiro);
-                }
+
+            if (indiceConsulta == -1) {
+                this.realizaJogada(tabuleiro);
             } else {
-                System.out.println("Insira um numero valido!");
+
+                if (indiceConsulta < this.maoDeCarta.length && this.maoDeCarta[indiceConsulta] != null) {
+                    if (this.maoDeCarta[indiceConsulta].getClass() == Monstro.class) {
+                        Monstro monstro = (Monstro) maoDeCarta[indiceConsulta];
+                        for (int i = 0; i < mesaJogador.length; i++) {
+                            if (mesaJogador[i] == null) {
+                                //terminar isso ainda       
+                                System.out.println("Insira:\n1: Ataque;\n2: Defesa;");
+                                int opcao = s.nextInt();
+                                switch (opcao) {
+                                    case 1:
+                                        monstro.alteraEstado(1);
+                                        break;
+                                    case 2:
+                                        monstro.alteraEstado(0);
+                                        break;
+                                    default:
+                                        System.out.println("Número invalido! Tente novamente!");
+                                        this.posicionaCarta(tabuleiro);
+                                }
+                                mesaJogador[i] = this.maoDeCarta[indiceConsulta];
+                                this.maoDeCarta[indiceConsulta] = null;
+                                System.out.println("Carta posicionada com sucesso!");
+                                return;
+                            }
+                        }
+                        System.out.println("Voce atingiu o limite do numero de cartas na mesa!");
+                    } else {
+                        System.out.println("Somente monstros podem ser selecionados!");
+                        this.realizaJogada(tabuleiro);
+                    }
+                } else {
+                    System.out.println("Insira um numero valido!");
+                }
             }
         } while (!(indiceConsulta < this.maoDeCarta.length && this.maoDeCarta[indiceConsulta] != null));
 

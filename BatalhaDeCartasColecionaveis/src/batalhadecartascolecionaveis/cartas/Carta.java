@@ -98,4 +98,8 @@ public abstract class Carta {
         return def;
     }
 
+    @Override
+    public String toString() {
+        return "Nome: " + this.nome + "\nAtaque: " + atk + "\nDefesa: " + def;
+    }
 }

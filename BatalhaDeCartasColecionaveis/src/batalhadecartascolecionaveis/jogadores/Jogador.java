@@ -196,4 +196,10 @@ public class Jogador {
         Estilizacao.imprimeLinha();
     }
 
+    public void setMaoDeCarta(Carta[] maoDeCartas) {
+        for (int i = 0; i < maoDeCartas.length; i++) {
+            this.maoDeCarta[i] = maoDeCartas[i];
+        }
+    }
+
 }

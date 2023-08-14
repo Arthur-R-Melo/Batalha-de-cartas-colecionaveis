@@ -45,12 +45,15 @@ public class Partida {
     public void realizaPartida() {
         this.distribuiCarta();
         boolean acabou;
+
+        int dano;
         do {
             Estilizacao.imprimeLinha();
             System.out.println("Rodada do jogador 1");
             Estilizacao.imprimeLinha();
             this.jogadores[0].compraCarta(tabuleiro);
-            this.jogadores[0].realizaJogada(tabuleiro);
+            dano = this.jogadores[0].realizaJogada(tabuleiro);
+            this.jogadores[1].setPontosDeVida(this.jogadores[1].getPontosDeVida()-dano);
 
             Estilizacao.imprimeLinha();
             System.out.println("\n\n");
@@ -59,7 +62,8 @@ public class Partida {
             System.out.println("Rodada do jogador 2");
             Estilizacao.imprimeLinha();
             this.jogadores[1].compraCarta(tabuleiro);
-            this.jogadores[1].realizaJogada(tabuleiro);
+            dano = this.jogadores[1].realizaJogada(tabuleiro);
+            this.jogadores[1].setPontosDeVida(this.jogadores[1].getPontosDeVida()-dano);
 
             //Verificando se a vitória ocorreu e informando quem venceu
             acabou = this.jogadores[0].getPontosDeVida()<=0 || this.jogadores[1].getPontosDeVida()<=0;

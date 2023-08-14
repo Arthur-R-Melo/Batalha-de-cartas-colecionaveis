@@ -60,4 +60,16 @@ public class Monstro extends Carta {
         return equipamento;
     }
 
+    @Override
+    public String toString() {
+        String monstroTxt = "Nome: " + this.nome + "\nAtaque: " + atk + "\nDefesa: " + def + "\nEstado: ";
+        
+        monstroTxt += this.estado ? "Defesa" : "Ataque";
+               
+        monstroTxt += this.equipamento != null ? "\n Equipamento: " + this.equipamento : "";
+        
+        return monstroTxt;
+        
+    }
+
 }

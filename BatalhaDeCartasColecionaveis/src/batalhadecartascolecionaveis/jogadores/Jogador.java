@@ -13,25 +13,25 @@ import java.util.Vector;
  * @author Valtin
  */
 public class Jogador {
-    
+
     protected int pontosDeVida;
     protected Carta[] maoDeCarta;
     protected int id;
-    
+
     public Jogador(int id) {
         this.id = id;
         this.pontosDeVida = 10000;
         this.maoDeCarta = new Carta[10];
     }
-    
+
     public int getPontosDeVida() {
         return pontosDeVida;
     }
-    
+
     public Carta[] getMaoDeCarta() {
         return maoDeCarta;
     }
-    
+
     public void realizaJogada(Tabuleiro tabuleiro) {
         Estilizacao.imprimeLinha();
         Scanner s = new Scanner(System.in);
@@ -45,7 +45,7 @@ public class Jogador {
                            6- Consultar Cartas da mao""");
         int opcao = s.nextInt();
         Estilizacao.imprimeLinha();
-        
+
         switch (opcao) {
             case 1 ->
                 this.realizaAtaque();
@@ -56,7 +56,7 @@ public class Jogador {
             case 4 ->
                 this.descartaCarta(tabuleiro);
             case 5 ->
-                this.alteraEstadoCarta();
+                this.alteraEstadoCarta(tabuleiro);
             case 6 -> {
                 this.exibirCartasDaMao();
                 this.realizaJogada(tabuleiro);
@@ -65,32 +65,32 @@ public class Jogador {
                 System.out.println("Insira um número válido!");
                 this.realizaJogada(tabuleiro);
             }
-            
+
         }
-        
+
     }
-    
+
     protected void realizaAtaque() {
-        
+
     }
-    
+
     protected void posicionaCarta(Tabuleiro tabuleiro) {
         Scanner s = new Scanner(System.in);
         Carta[] mesaJogador = tabuleiro.getCartasJogador()[this.id];
-        
+
         System.out.println("Qual carta deseja posicionar? ");
         this.exibirCartasDaMao();
-        
+
         int indiceConsulta;
-        
+
         do {
             System.out.println("Insira o numero da carta você deseja posicionar: (-1 para retornar");
             indiceConsulta = s.nextInt();
-            
+
             if (indiceConsulta == -1) {
                 this.realizaJogada(tabuleiro);
             } else {
-                
+
                 if (indiceConsulta < this.maoDeCarta.length && this.maoDeCarta[indiceConsulta] != null) {
                     if (this.maoDeCarta[indiceConsulta].getClass() == Monstro.class) {
                         Monstro monstro = (Monstro) maoDeCarta[indiceConsulta];
@@ -125,15 +125,55 @@ public class Jogador {
                 }
             }
         } while ((indiceConsulta < this.maoDeCarta.length) && (indiceConsulta >= 0) && (this.maoDeCarta[indiceConsulta] != null));
-        
+
     }
-    
-    protected void alteraEstadoCarta() {
-        
+
+    protected void alteraEstadoCarta(Tabuleiro tabuleiro) {
+        Carta[] mesaJogador = tabuleiro.getCartasJogador()[this.id];
+        Scanner s = new Scanner(System.in);
+
+        System.out.println("Monstros disponíveis para alterar o estado:");
+        for (int i = 0; i < mesaJogador.length; i++) {
+            if (mesaJogador[i] != null) {
+                if (mesaJogador[i].getClass() == Monstro.class) {
+                    System.out.println((Monstro) mesaJogador[i]);
+                }
+            }
+        }
+
+        int indiceMonstro;
+        do {
+            System.out.println("Insira o indice do monstro: (-1 para cancelar)");
+            indiceMonstro = s.nextInt();
+
+            if (indiceMonstro == -1) {
+                this.realizaJogada(tabuleiro);
+            } else if ((indiceMonstro >= 0 && indiceMonstro < mesaJogador.length) && mesaJogador[indiceMonstro] != null
+                    && mesaJogador[indiceMonstro].getClass() == Monstro.class) {
+
+                Monstro tempMonstro = (Monstro) mesaJogador[indiceMonstro];
+                System.out.println("Insira:\n1: Ataque;\n2: Defesa;");
+                int opcao = s.nextInt();
+                switch (opcao) {
+                    case 1:
+                        tempMonstro.alteraEstado(1);
+                        indiceMonstro = -1;
+                        break;
+                    case 2:
+                        tempMonstro.alteraEstado(0);
+                        indiceMonstro = -1;
+                        break;
+                    default:
+                        System.out.println("Número invalido! Tente novamente!");
+                }
+            } else {
+                System.out.println("Insira um numero valido!");
+            }
+        } while (indiceMonstro != -1);
     }
-    
+
     public void compraCarta(Tabuleiro tabuleiro) {
-        
+
         for (int i = 0; i < this.maoDeCarta.length; i++) {
             if (this.maoDeCarta[i] == null) {
                 Carta novaCarta = tabuleiro.getBaralho().firstElement();
@@ -147,11 +187,11 @@ public class Jogador {
         this.descartaCarta(tabuleiro);
         this.compraCarta(tabuleiro);
     }
-    
+
     protected void descartaCarta(Tabuleiro tabuleiro) {
         Scanner s = new Scanner(System.in);
         this.exibirCartasDaMao();
-        
+
         int indiceDescarte;
         do {
             System.out.println("Insira o numero da carta você deseja descartar: (-1 para cancelar)");
@@ -168,7 +208,7 @@ public class Jogador {
             }
         } while (!(indiceDescarte < this.maoDeCarta.length) && (this.maoDeCarta[indiceDescarte] == null));
     }
-    
+
     protected void equipaMonstro(Tabuleiro tabuleiro) {
         Scanner s = new Scanner(System.in);
         Carta[] mesaJogador = tabuleiro.getCartasJogador()[this.id];
@@ -179,24 +219,62 @@ public class Jogador {
             if (mesaJogador[i] != null) {
                 if (mesaJogador[i].getClass() == Monstro.class) {
                     Monstro tempMonstro = (Monstro) mesaJogador[i];
-                    
-                    if (tempMonstro.getEquipamento() == null) {
+
+                    if (tempMonstro.getEquipamento()
+                            == null) {
                         System.out.println("[" + i + "] " + mesaJogador[i]);
                     }
                 }
             }
         }
-        
+
         System.out.println("Equipamentos disponíveis para equipar: ");
-        
+
         for (int i = 0; i < this.maoDeCarta.length; i++) {
             if (this.maoDeCarta[i] != null && this.maoDeCarta[i].getClass() == Equipamento.class) {
-                System.out.println(this.maoDeCarta[i]);
+                System.out.println(
+                        this.maoDeCarta[i]);
             }
         }
-        
+
+        int indiceMonstro;
+        do {
+            System.out.println("Insira o indice do monstro que deseja equipar: (-1 para cancelar)");
+            indiceMonstro = s.nextInt();
+            if (indiceMonstro == -1) {
+                //volta
+            } else {
+                if ((indiceMonstro >= 0 && indiceMonstro < mesaJogador.length) && (mesaJogador[indiceMonstro] != null)) {
+                    Monstro tempMonstro = (Monstro) mesaJogador[indiceMonstro];
+
+                    int indiceEquipamento;
+                    do {
+                        System.out.println("Insira agora o índice do equipamento: (-1 para cancelar)");
+                        indiceEquipamento = s.nextInt();
+
+                        if (indiceEquipamento == -1) {
+                            this.realizaJogada(tabuleiro);
+                            indiceMonstro = -1; //foi atribuido a -1 para encerrar ambos os laços
+
+                        } else {
+                            if (this.maoDeCarta[indiceEquipamento] != null && this.maoDeCarta[indiceEquipamento].getClass() == Equipamento.class) {
+                                tempMonstro.equipaItem(
+                                        (Equipamento) this.maoDeCarta[indiceEquipamento]);
+                                indiceMonstro = -1;
+                                indiceEquipamento = -1;
+                            } else {
+                                System.out.println("Insira um indice valido!");
+                            }
+                        }
+                    } while (indiceEquipamento != -1);
+                } else {
+                    System.out.println("Insira um numero valido!");
+                }
+
+            }
+        } while (!(indiceMonstro == -1));
     }
-    
+
     protected void exibirCartasDaMao() {
         System.out.println("CARTAS DA SUA MAO:");
         Estilizacao.imprimeLinha();
@@ -207,11 +285,11 @@ public class Jogador {
         }
         Estilizacao.imprimeLinha();
     }
-    
+
     public void setMaoDeCarta(Carta[] maoDeCartas) {
         for (int i = 0; i < maoDeCartas.length; i++) {
             this.maoDeCarta[i] = maoDeCartas[i];
         }
     }
-    
+
 }

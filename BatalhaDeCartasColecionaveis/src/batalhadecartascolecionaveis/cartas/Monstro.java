@@ -56,4 +56,8 @@ public class Monstro extends Carta {
         this.atacou = atacou;
     }
 
+    public Equipamento getEquipamento() {
+        return equipamento;
+    }
+
 }

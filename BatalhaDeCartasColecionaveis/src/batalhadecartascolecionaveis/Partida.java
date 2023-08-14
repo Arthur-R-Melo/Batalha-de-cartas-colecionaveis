@@ -27,7 +27,7 @@ public class Partida {
                 num = s.nextInt();
             }
             if (num == 1) {
-                //TODO
+                //TO DO
                 jogadores[1] = new Jogador(1);
             } else {
                 jogadores[1] = new Jogador(1);
@@ -46,10 +46,19 @@ public class Partida {
         this.distribuiCarta();
         boolean acabou;
         do {
+            Estilizacao.imprimeLinha();
             System.out.println("Rodada do jogador 1");
+            Estilizacao.imprimeLinha();
+            this.jogadores[0].compraCarta(tabuleiro);
             this.jogadores[0].realizaJogada(tabuleiro);
 
+            Estilizacao.imprimeLinha();
+            System.out.println("\n\n");
+            
+            Estilizacao.imprimeLinha();
             System.out.println("Rodada do jogador 2");
+            Estilizacao.imprimeLinha();
+            this.jogadores[1].compraCarta(tabuleiro);
             this.jogadores[1].realizaJogada(tabuleiro);
 
             //Verificando se a vitória ocorreu e informando quem venceu

@@ -3,6 +3,7 @@ package batalhadecartascolecionaveis.jogadores;
 import batalhadecartascolecionaveis.Estilizacao;
 import batalhadecartascolecionaveis.Tabuleiro;
 import batalhadecartascolecionaveis.cartas.Carta;
+import batalhadecartascolecionaveis.cartas.Equipamento;
 import batalhadecartascolecionaveis.cartas.Monstro;
 import java.util.Scanner;
 import java.util.Vector;
@@ -12,29 +13,28 @@ import java.util.Vector;
  * @author Valtin
  */
 public class Jogador {
-
+    
     protected int pontosDeVida;
     protected Carta[] maoDeCarta;
     protected int id;
-
+    
     public Jogador(int id) {
         this.id = id;
         this.pontosDeVida = 10000;
         this.maoDeCarta = new Carta[10];
     }
-
+    
     public int getPontosDeVida() {
         return pontosDeVida;
     }
-
+    
     public Carta[] getMaoDeCarta() {
         return maoDeCarta;
     }
-
+    
     public void realizaJogada(Tabuleiro tabuleiro) {
         Estilizacao.imprimeLinha();
         Scanner s = new Scanner(System.in);
-        this.compraCarta(tabuleiro);
         System.out.println("""
                            Insira o numero desejado:
                            1- Realizar Ataque;
@@ -45,7 +45,7 @@ public class Jogador {
                            6- Consultar Cartas da mao""");
         int opcao = s.nextInt();
         Estilizacao.imprimeLinha();
-
+        
         switch (opcao) {
             case 1 ->
                 this.realizaAtaque();
@@ -57,39 +57,40 @@ public class Jogador {
                 this.descartaCarta(tabuleiro);
             case 5 ->
                 this.alteraEstadoCarta();
-            case 6 ->
+            case 6 -> {
                 this.exibirCartasDaMao();
+                this.realizaJogada(tabuleiro);
+            }
             default -> {
                 System.out.println("Insira um número válido!");
                 this.realizaJogada(tabuleiro);
             }
-
+            
         }
-
+        
     }
-
+    
     protected void realizaAtaque() {
-
+        
     }
-
+    
     protected void posicionaCarta(Tabuleiro tabuleiro) {
         Scanner s = new Scanner(System.in);
         Carta[] mesaJogador = tabuleiro.getCartasJogador()[this.id];
-        //resolver esse 'id', pq tem que ter algum jeito de saber de quem estará modificando as cartas no tabuleiro
-
+        
         System.out.println("Qual carta deseja posicionar? ");
         this.exibirCartasDaMao();
-
+        
         int indiceConsulta;
-
+        
         do {
             System.out.println("Insira o numero da carta você deseja posicionar: (-1 para retornar");
             indiceConsulta = s.nextInt();
-
+            
             if (indiceConsulta == -1) {
                 this.realizaJogada(tabuleiro);
             } else {
-
+                
                 if (indiceConsulta < this.maoDeCarta.length && this.maoDeCarta[indiceConsulta] != null) {
                     if (this.maoDeCarta[indiceConsulta].getClass() == Monstro.class) {
                         Monstro monstro = (Monstro) maoDeCarta[indiceConsulta];
@@ -123,16 +124,16 @@ public class Jogador {
                     System.out.println("Insira um numero valido!");
                 }
             }
-        } while (!(indiceConsulta < this.maoDeCarta.length && this.maoDeCarta[indiceConsulta] != null));
-
+        } while ((indiceConsulta < this.maoDeCarta.length) && (indiceConsulta >= 0) && (this.maoDeCarta[indiceConsulta] != null));
+        
     }
-
+    
     protected void alteraEstadoCarta() {
-
+        
     }
-
-    protected void compraCarta(Tabuleiro tabuleiro) {
-
+    
+    public void compraCarta(Tabuleiro tabuleiro) {
+        
         for (int i = 0; i < this.maoDeCarta.length; i++) {
             if (this.maoDeCarta[i] == null) {
                 Carta novaCarta = tabuleiro.getBaralho().firstElement();
@@ -146,11 +147,11 @@ public class Jogador {
         this.descartaCarta(tabuleiro);
         this.compraCarta(tabuleiro);
     }
-
+    
     protected void descartaCarta(Tabuleiro tabuleiro) {
         Scanner s = new Scanner(System.in);
         this.exibirCartasDaMao();
-
+        
         int indiceDescarte;
         do {
             System.out.println("Insira o numero da carta você deseja descartar: (-1 para cancelar)");
@@ -167,24 +168,35 @@ public class Jogador {
             }
         } while (!(indiceDescarte < this.maoDeCarta.length) && (this.maoDeCarta[indiceDescarte] == null));
     }
-
+    
     protected void equipaMonstro(Tabuleiro tabuleiro) {
         Scanner s = new Scanner(System.in);
         Carta[] mesaJogador = tabuleiro.getCartasJogador()[this.id];
 
-        //exibindo somente as cartas do jogador na mesa
+        //exibindo somente as cartas do jogador na mesa que podem ser equipadas
         System.out.println("Cartas que podem ser equipadas: ");
         for (int i = 0; i < mesaJogador.length; i++) {
             if (mesaJogador[i] != null) {
                 if (mesaJogador[i].getClass() == Monstro.class) {
-                    //terminar isso aqui
-                    System.out.println("[" + i + "]" + mesaJogador[i]);
+                    Monstro tempMonstro = (Monstro) mesaJogador[i];
+                    
+                    if (tempMonstro.getEquipamento() == null) {
+                        System.out.println("[" + i + "] " + mesaJogador[i]);
+                    }
                 }
             }
         }
-
+        
+        System.out.println("Equipamentos disponíveis para equipar: ");
+        
+        for (int i = 0; i < this.maoDeCarta.length; i++) {
+            if (this.maoDeCarta[i] != null && this.maoDeCarta[i].getClass() == Equipamento.class) {
+                System.out.println(this.maoDeCarta[i]);
+            }
+        }
+        
     }
-
+    
     protected void exibirCartasDaMao() {
         System.out.println("CARTAS DA SUA MAO:");
         Estilizacao.imprimeLinha();
@@ -195,11 +207,11 @@ public class Jogador {
         }
         Estilizacao.imprimeLinha();
     }
-
+    
     public void setMaoDeCarta(Carta[] maoDeCartas) {
         for (int i = 0; i < maoDeCartas.length; i++) {
             this.maoDeCarta[i] = maoDeCartas[i];
         }
     }
-
+    
 }

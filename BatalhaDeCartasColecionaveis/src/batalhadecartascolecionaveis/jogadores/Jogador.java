@@ -18,7 +18,7 @@ public class Jogador {
     protected Carta[] maoDeCarta;
     protected int id;
     
-    public Jogador(int id) {
+    public  Jogador(int id) {
         this.id = id;
         this.pontosDeVida = 10000;
         this.maoDeCarta = new Carta[10];
@@ -26,6 +26,10 @@ public class Jogador {
     
     public int getPontosDeVida() {
         return pontosDeVida;
+    }
+
+    public void setPontosDeVida(int pontosDeVida) {
+        this.pontosDeVida = pontosDeVida;
     }
     
     public Carta[] getMaoDeCarta() {

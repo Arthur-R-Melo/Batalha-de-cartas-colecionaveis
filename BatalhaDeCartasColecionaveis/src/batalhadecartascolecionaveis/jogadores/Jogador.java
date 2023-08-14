@@ -17,13 +17,8 @@ public class Jogador {
     protected int pontosDeVida;
     protected Carta[] maoDeCarta;
     protected int id;
-<<<<<<< HEAD
     
     public  Jogador(int id) {
-=======
-
-    public Jogador(int id) {
->>>>>>> c88093e2f99f9070b324c9fc58ff47a2ea205f60
         this.id = id;
         this.pontosDeVida = 10000;
         this.maoDeCarta = new Carta[10];
@@ -32,14 +27,9 @@ public class Jogador {
     public int getPontosDeVida() {
         return pontosDeVida;
     }
-
-<<<<<<< HEAD
     public void setPontosDeVida(int pontosDeVida) {
         this.pontosDeVida = pontosDeVida;
     }
-    
-=======
->>>>>>> c88093e2f99f9070b324c9fc58ff47a2ea205f60
     public Carta[] getMaoDeCarta() {
         return maoDeCarta;
     }

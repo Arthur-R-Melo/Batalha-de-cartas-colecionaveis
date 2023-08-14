@@ -35,4 +35,19 @@ public class Tabuleiro {
         this.cartasJogador = cartasJogador;
     }
 
+    @Override
+    public String toString() {
+        String texto;
+        texto = "Cartas do jogador 1: ";
+        for (Carta carta : cartasJogador[0]) {
+            texto += carta.toString();
+        }
+        texto += "\nCartas do jogador 2: ";
+        
+        for (Carta carta : cartasJogador[1]) {
+            texto += carta.toString();
+        }
+        return texto;
+    }
+
 }

@@ -63,7 +63,7 @@ public class Partida {
             Estilizacao.imprimeLinha();
             this.jogadores[1].compraCarta(tabuleiro);
             dano = this.jogadores[1].realizaJogada(tabuleiro);
-            this.jogadores[1].setPontosDeVida(this.jogadores[1].getPontosDeVida()-dano);
+            this.jogadores[0].setPontosDeVida(this.jogadores[0].getPontosDeVida()-dano);
 
             //Verificando se a vitória ocorreu e informando quem venceu
             acabou = this.jogadores[0].getPontosDeVida()<=0 || this.jogadores[1].getPontosDeVida()<=0;

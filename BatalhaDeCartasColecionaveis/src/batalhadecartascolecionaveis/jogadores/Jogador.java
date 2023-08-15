@@ -45,7 +45,9 @@ public class Jogador {
     public int realizaJogada(Tabuleiro tabuleiro) {
         //retornará para a partida o dano para o adversário
         int dano = 0;
-
+        
+        Estilizacao.imprimeLinha();
+        System.out.println(tabuleiro.toString());
         Estilizacao.imprimeLinha();
         Scanner s = new Scanner(System.in);
         System.out.println("""
@@ -60,8 +62,14 @@ public class Jogador {
         Estilizacao.imprimeLinha();
 
         switch (opcao) {
-            case 1 ->
-                dano = this.realizaAtaque(tabuleiro);
+            case 1 -> {
+                if(tabuleiro.getRodada() != 1) {
+                    dano = this.realizaAtaque(tabuleiro);
+                }else {
+                    System.out.println("Só é possível atacar após a primeira rodada!");
+                    this.realizaJogada(tabuleiro);
+                }
+            }
             case 2 ->
                 this.posicionaCarta(tabuleiro);
             case 3 ->
@@ -134,7 +142,7 @@ public class Jogador {
                             Monstro tempMonstroInimigo = (Monstro) mesaInimigo[indiceMonstroInimigo];
 
                             if (tempMonstroInimigo.isEstado()) {
-                                dano = tempMonstroJogador.getAtk() - tempMonstroInimigo.atacaDefende();
+                                dano = tempMonstroJogador.atacaDefende()- tempMonstroInimigo.atacaDefende();
                                 if (dano > 0) {
                                     mesaInimigo[indiceMonstroInimigo] = null;
                                     System.out.println("Monstro inimigo destruido!!!");
@@ -332,8 +340,7 @@ public class Jogador {
 
         for (int i = 0; i < this.maoDeCarta.length; i++) {
             if (this.maoDeCarta[i] != null && this.maoDeCarta[i].getClass() == Equipamento.class) {
-                System.out.println(
-                        this.maoDeCarta[i]);
+                System.out.println("[" + i + "] " + this.maoDeCarta[i]);
             }
         }
 

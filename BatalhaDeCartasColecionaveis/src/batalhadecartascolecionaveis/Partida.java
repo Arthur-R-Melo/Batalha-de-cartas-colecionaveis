@@ -76,6 +76,8 @@ public class Partida {
                 } else {
                     System.out.println("Vitória do jogador 1!");
                 }
+            }else {
+                tabuleiro.setRodada(tabuleiro.getRodada()+1);
             }
         } while (!acabou);
     }

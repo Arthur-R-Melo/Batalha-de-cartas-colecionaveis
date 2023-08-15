@@ -12,8 +12,10 @@ public class Tabuleiro {
 
     private Carta[][] cartasJogador;//um vetor das cartas de cada jogador no tabuleiro
     private Vector<Carta> baralho;
+    private int rodada;
 
     public Tabuleiro() {
+        this.rodada = 1;
         try {
             baralho = Carta.importaCarta();
         } catch (IOException e) {
@@ -21,6 +23,14 @@ public class Tabuleiro {
         }
         this.cartasJogador = new Carta[2][5];
 
+    }
+
+    public int getRodada() {
+        return rodada;
+    }
+
+    public void setRodada(int rodada) {
+        this.rodada = rodada;
     }
 
     public Carta[][] getCartasJogador() {

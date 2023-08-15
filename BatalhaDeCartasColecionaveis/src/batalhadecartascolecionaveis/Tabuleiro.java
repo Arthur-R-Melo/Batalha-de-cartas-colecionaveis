@@ -42,8 +42,9 @@ public class Tabuleiro {
         for (Carta carta : cartasJogador[0]) {
             texto += carta.toString();
         }
+        texto += "\n----------------------------------------------------------------------";
         texto += "\nCartas do jogador 2: ";
-        
+
         for (Carta carta : cartasJogador[1]) {
             texto += carta.toString();
         }

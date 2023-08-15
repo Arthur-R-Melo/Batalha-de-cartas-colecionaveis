@@ -6,9 +6,10 @@ import batalhadecartascolecionaveis.cartas.Carta;
 import batalhadecartascolecionaveis.jogadores.Jogador;
 
 public class Partida {
+
     private Tabuleiro tabuleiro;
     private Jogador[] jogadores;
-    
+
     public Partida(Jogador[] jogadores) {
         this.jogadores = jogadores;
         this.tabuleiro = new Tabuleiro();
@@ -35,7 +36,7 @@ public class Partida {
 
             Partida partida = new Partida(jogadores);
             partida.realizaPartida();
-            
+
             System.out.println("Deseja jogar novamente?(1 - sim/outro valor - não)");
             jogarNovamente = s.nextInt();
         } while (jogarNovamente == 1);
@@ -54,21 +55,21 @@ public class Partida {
             Estilizacao.imprimeLinha();
             this.jogadores[0].compraCarta(tabuleiro);
             dano = this.jogadores[0].realizaJogada(tabuleiro);
-            this.jogadores[1].setPontosDeVida(this.jogadores[1].getPontosDeVida()-dano);
+            this.jogadores[1].setPontosDeVida(this.jogadores[1].getPontosDeVida() - dano);
 
             Estilizacao.imprimeLinha();
             System.out.println("\n\n");
-            
+
             Estilizacao.imprimeLinha();
             System.out.println(tabuleiro);
             System.out.println("Rodada do jogador 2");
             Estilizacao.imprimeLinha();
             this.jogadores[1].compraCarta(tabuleiro);
             dano = this.jogadores[1].realizaJogada(tabuleiro);
-            this.jogadores[0].setPontosDeVida(this.jogadores[0].getPontosDeVida()-dano);
+            this.jogadores[0].setPontosDeVida(this.jogadores[0].getPontosDeVida() - dano);
 
             //Verificando se a vitória ocorreu e informando quem venceu
-            acabou = this.jogadores[0].getPontosDeVida()<=0 || this.jogadores[1].getPontosDeVida()<=0;
+            acabou = this.jogadores[0].getPontosDeVida() <= 0 || this.jogadores[1].getPontosDeVida() <= 0;
             if (acabou) {
                 if (this.jogadores[0].getPontosDeVida() <= 0) {
                     System.out.println("Vitória do jogador 2!");

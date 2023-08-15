@@ -25,7 +25,6 @@ public abstract class Carta {
      * Caso o Vector cartas já tenha sido instanciado, este é imediatamente retornado,
      * no outro caso, as cartas são importadas do arquivo e carregadas para a memória RAM.
      */
-
     public static Vector<Carta> importaCarta() throws IOException {
         if (cartas == null) {
             cartas = new Vector<>();

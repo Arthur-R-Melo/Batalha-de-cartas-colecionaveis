@@ -40,13 +40,17 @@ public class Tabuleiro {
         String texto;
         texto = "Cartas do jogador 1: ";
         for (Carta carta : cartasJogador[0]) {
-            texto += carta.toString();
+            if (carta != null) {
+                texto += carta.toString();
+            }
         }
         texto += "\n----------------------------------------------------------------------";
         texto += "\nCartas do jogador 2: ";
 
         for (Carta carta : cartasJogador[1]) {
-            texto += carta.toString();
+            if (carta != null) {
+                texto += carta.toString();
+            }
         }
         return texto;
     }

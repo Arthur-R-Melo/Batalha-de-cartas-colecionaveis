@@ -61,7 +61,7 @@ public class Jogador {
 
         switch (opcao) {
             case 1 ->
-                this.realizaAtaque();
+                dano = this.realizaAtaque(tabuleiro);
             case 2 ->
                 this.posicionaCarta(tabuleiro);
             case 3 ->
@@ -86,12 +86,13 @@ public class Jogador {
     }
 
     protected int realizaAtaque(Tabuleiro tabuleiro) {
+        int dano;
         Scanner s = new Scanner(System.in);
         Carta[] mesaJogador = tabuleiro.getCartasJogador()[this.id];
 
         System.out.println("Cartas possíveis para atacar: ");
         for (int i = 0; i < mesaJogador.length; i++) {
-            if (mesaJogador[i] != null && (mesaJogador[i].getClass() == Monstro.class)) {
+            if (mesaJogador[i] != null) {
                 System.out.println((Monstro) mesaJogador[i]);
 
                 System.out.println("[" + i + "] " + (Monstro) mesaJogador[i]);
@@ -101,24 +102,69 @@ public class Jogador {
         int indiceMonstro;
 
         do {
-            System.out.println("Insira o indice do monstro: (-1 para cancelar)");
+            System.out.println("Insira o indice do seu monstro: (-1 para cancelar)");
             indiceMonstro = s.nextInt();
 
             if (indiceMonstro == -1) {
                 this.realizaJogada(tabuleiro);
-            } else if ((indiceMonstro >= 0 && indiceMonstro < mesaJogador.length) && mesaJogador[indiceMonstro] != null
-                    && mesaJogador[indiceMonstro].getClass() == Monstro.class) {
+            } else if ((indiceMonstro >= 0 && indiceMonstro < mesaJogador.length) && mesaJogador[indiceMonstro] != null) {
                 Monstro tempMonstroJogador = (Monstro) mesaJogador[indiceMonstro];
-                if (!tempMonstroJogador.isEstado()) {
+                if (!tempMonstroJogador.isEstado() && tempMonstroJogador.isAtacou()) {
                     //imprima as cartas rivais
+                    int idInimigo = this.id == 0 ? 1 : 0; // descobrir o id do jogador inimigo
+                    Carta[] mesaInimigo = tabuleiro.getCartasJogador()[idInimigo];
+                    Boolean inimigoTemCarta = false;
                     
-                    
-                    //
-                    do{
-                        
+                    for (int i = 0; i < mesaInimigo.length; i++) {
+                        if (mesaInimigo[i] != null) {
+                            System.out.println("[" + i + "] " + mesaInimigo[i]);
+                            inimigoTemCarta = true;
+                        }
                     }
-                }else{
-                    System.out.println("Insira o indice de um monstro que esteja em posicao de ataque!");
+
+                    if(!inimigoTemCarta) {
+                        System.out.println("O inimigo não tem cartas, dano aplicado direto a ele");
+                        return tempMonstroJogador.getAtk(); 
+                    }
+                    int indiceMonstroInimigo;
+                    do {
+                        System.out.println("Insira o indice do monstro que deseja atacar: ");
+                        indiceMonstroInimigo = s.nextInt();
+                        
+                        if(indiceMonstroInimigo >= 0 && indiceMonstroInimigo < mesaInimigo.length
+                            && mesaInimigo[indiceMonstroInimigo] != null) {
+                            Monstro tempMonstroInimigo = (Monstro)mesaInimigo[indiceMonstroInimigo];
+                            
+                            if(tempMonstroInimigo.isEstado()) {
+                                dano = tempMonstroJogador.getAtk() - tempMonstroInimigo.atacaDefende();
+                                if(dano > 0) {
+                                    mesaInimigo[indiceMonstroInimigo] = null;
+                                    System.out.println("Monstro inimigo destruido!!!");
+                                } else if(dano < 0) {
+                                    mesaJogador[indiceMonstro] = null;
+                                    System.out.println("Seu monstro perdeu e foi destruido!");
+                                } else {
+                                    System.out.println("EMPATE! nada ocorreu");
+                                }
+                                return 0;
+                            } else {
+                                dano = tempMonstroJogador.getAtk() - tempMonstroInimigo.atacaDefende();
+                                if(dano >= 0) {
+                                    return dano;
+                                } else {
+                                    this.pontosDeVida += dano;
+                                }
+                            }
+                            
+                            
+                        }else{
+                            System.out.println("Insira algo valido!");
+                        }
+                        
+                    } while (indiceMonstroInimigo < 0 || indiceMonstroInimigo >= mesaInimigo.length
+                            || mesaInimigo[indiceMonstroInimigo] == null);
+                } else {
+                    System.out.println("Insira o indice de um monstro que esteja em posicao de ataque ou que ainda n atacou!");
                 }
 
             } else {
@@ -126,6 +172,7 @@ public class Jogador {
             }
         } while (indiceMonstro != -1);
 
+        return 0;
     }
 
     protected void posicionaCarta(Tabuleiro tabuleiro) {

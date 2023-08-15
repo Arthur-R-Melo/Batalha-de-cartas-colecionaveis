@@ -49,6 +49,7 @@ public class Partida {
         int dano;
         do {
             Estilizacao.imprimeLinha();
+            System.out.println(tabuleiro);
             System.out.println("Rodada do jogador 1");
             Estilizacao.imprimeLinha();
             this.jogadores[0].compraCarta(tabuleiro);
@@ -59,6 +60,7 @@ public class Partida {
             System.out.println("\n\n");
             
             Estilizacao.imprimeLinha();
+            System.out.println(tabuleiro);
             System.out.println("Rodada do jogador 2");
             Estilizacao.imprimeLinha();
             this.jogadores[1].compraCarta(tabuleiro);

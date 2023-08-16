@@ -45,7 +45,7 @@ public class Jogador {
     public int realizaJogada(Tabuleiro tabuleiro) {
         //retornará para a partida o dano para o adversário
         int dano = 0;
-        
+
         Estilizacao.imprimeLinha();
         System.out.println(tabuleiro.toString());
         Estilizacao.imprimeLinha();
@@ -63,9 +63,9 @@ public class Jogador {
 
         switch (opcao) {
             case 1 -> {
-                if(tabuleiro.getRodada() != 1) {
+                if (tabuleiro.getRodada() != 1) {
                     dano = this.realizaAtaque(tabuleiro);
-                }else {
+                } else {
                     System.out.println("Só é possível atacar após a primeira rodada!");
                     this.realizaJogada(tabuleiro);
                 }
@@ -142,7 +142,7 @@ public class Jogador {
                             Monstro tempMonstroInimigo = (Monstro) mesaInimigo[indiceMonstroInimigo];
 
                             if (tempMonstroInimigo.isEstado()) {
-                                dano = tempMonstroJogador.atacaDefende()- tempMonstroInimigo.atacaDefende();
+                                dano = tempMonstroJogador.atacaDefende() - tempMonstroInimigo.atacaDefende();
                                 if (dano > 0) {
                                     mesaInimigo[indiceMonstroInimigo] = null;
                                     System.out.println("Monstro inimigo destruido!!!");
@@ -365,8 +365,8 @@ public class Jogador {
 
                         } else {
                             if (this.maoDeCarta[indiceEquipamento] != null && this.maoDeCarta[indiceEquipamento].getClass() == Equipamento.class) {
-                                tempMonstro.equipaItem(
-                                        (Equipamento) this.maoDeCarta[indiceEquipamento]);
+                                tempMonstro.equipaItem((Equipamento) this.maoDeCarta[indiceEquipamento]);
+                                this.maoDeCarta[indiceEquipamento] = null;
                                 indiceMonstro = -1;
                                 indiceEquipamento = -1;
                             } else {

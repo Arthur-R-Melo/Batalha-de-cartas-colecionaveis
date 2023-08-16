@@ -20,7 +20,23 @@ public class Maquina extends Jogador {
 
     @Override
     public int realizaJogada(Tabuleiro tabuleiro) {
-        return super.realizaJogada(tabuleiro);
+        int dano = 0;
+        
+        Random r = new Random();
+        int opc = r.nextInt(0, 3); //sortear o q a maquina ira fazer
+        
+        switch (opc) {
+            case 0:
+                posicionaCarta(tabuleiro);
+                break;
+            case 1:
+                equipaMonstro(tabuleiro);
+                break;
+            case 2:
+                dano = realizaAtaque(tabuleiro);
+        }
+        
+        return dano;
     }
 
     @Override
@@ -47,7 +63,7 @@ public class Maquina extends Jogador {
                 }
                 for (int i = 0; i < super.maoDeCarta.length; i++) {
                     if (super.maoDeCarta[i] != null && super.maoDeCarta[i].getClass() == Equipamento.class) {
-                        if(super.maoDeCarta[i].getDef() >= super.maoDeCarta[indiceMelhorEquipamento].getDef()) {
+                        if (super.maoDeCarta[i].getDef() >= super.maoDeCarta[indiceMelhorEquipamento].getDef()) {
                             indiceMelhorEquipamento = i;
                         }
                     }
@@ -68,7 +84,7 @@ public class Maquina extends Jogador {
                 }
                 for (int i = 0; i < super.maoDeCarta.length; i++) {
                     if (super.maoDeCarta[i] != null && super.maoDeCarta[i].getClass() == Equipamento.class) {
-                        if(super.maoDeCarta[i].getAtk() >= super.maoDeCarta[indiceMelhorEquipamento].getAtk()) {
+                        if (super.maoDeCarta[i].getAtk() >= super.maoDeCarta[indiceMelhorEquipamento].getAtk()) {
                             indiceMelhorEquipamento = i;
                         }
                     }
@@ -76,7 +92,10 @@ public class Maquina extends Jogador {
                 break;
         }
         
-        //acabar aqui ainda
+        Monstro tempMonstro = (Monstro)super.maoDeCarta[indiceMelhorAtributo];
+
+        tempMonstro.equipaItem((Equipamento) this.maoDeCarta[indiceMelhorEquipamento]);
+        this.maoDeCarta[indiceMelhorEquipamento] = null;
 
     }
 

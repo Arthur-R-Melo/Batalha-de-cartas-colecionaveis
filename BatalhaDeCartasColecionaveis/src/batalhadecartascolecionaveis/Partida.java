@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 import batalhadecartascolecionaveis.cartas.Carta;
 import batalhadecartascolecionaveis.jogadores.Jogador;
+import batalhadecartascolecionaveis.jogadores.Maquina;
 
 public class Partida {
 
@@ -29,7 +30,7 @@ public class Partida {
             }
             if (num == 1) {
                 //TO DO
-                jogadores[1] = new Jogador(1);
+                jogadores[1] = new Maquina(1);
             } else {
                 jogadores[1] = new Jogador(1);
             }

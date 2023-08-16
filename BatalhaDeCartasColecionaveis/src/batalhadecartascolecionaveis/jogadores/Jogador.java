@@ -115,7 +115,7 @@ public class Jogador {
                 this.realizaJogada(tabuleiro);
             } else if ((indiceMonstro >= 0 && indiceMonstro < mesaJogador.length) && mesaJogador[indiceMonstro] != null) {
                 Monstro tempMonstroJogador = (Monstro) mesaJogador[indiceMonstro];
-                if ((!tempMonstroJogador.isEstado()) && !tempMonstroJogador.isAtacou()) {
+                if (!tempMonstroJogador.isEstado()) {
                     //imprima as cartas rivais
                     int idInimigo = this.id == 0 ? 1 : 0; // descobrir o id do jogador inimigo
                     Carta[] mesaInimigo = tabuleiro.getCartasJogador()[idInimigo];
@@ -130,7 +130,7 @@ public class Jogador {
 
                     if (!inimigoTemCarta) {
                         System.out.println("O inimigo não tem cartas, dano aplicado direto a ele");
-                        return tempMonstroJogador.getAtk();
+                        return tempMonstroJogador.atacaDefende();
                     }
                     int indiceMonstroInimigo;
                     do {

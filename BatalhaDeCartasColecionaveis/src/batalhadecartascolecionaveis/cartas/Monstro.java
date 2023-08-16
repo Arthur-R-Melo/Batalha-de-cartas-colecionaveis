@@ -11,11 +11,9 @@ package batalhadecartascolecionaveis.cartas;
 public class Monstro extends Carta {
     private Equipamento equipamento;
     private boolean estado;// verdadeiro para defesa e falso para ataque
-    private boolean atacou;
 
     public Monstro(String nome, String descricao, int atk, int def) {
         super(nome, descricao, atk, def);
-        this.atacou = false;
     }
 
     public void alteraEstado(int estadoInt) {// 0 para defesa e 1 para ataque
@@ -46,14 +44,6 @@ public class Monstro extends Carta {
 
     public boolean isEstado() {
         return estado;
-    }
-
-    public boolean isAtacou() {
-        return atacou;
-    }
-
-    public void setAtacou(boolean atacou) {
-        this.atacou = atacou;
     }
 
     public Equipamento getEquipamento() {
